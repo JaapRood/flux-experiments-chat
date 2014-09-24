@@ -1,0 +1,30 @@
+{
+  "name": "flux-chat-example",
+  "version": "1.0.0",
+  "description": "A port of the official flux chat example to try and improve on some of it's concepts",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "watchify -o dist/bundle.js -v -d .",
+    "build": "NODE_ENV=production browserify . | uglifyjs -cm > dist/bundle.min.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "flux",
+    "react",
+    "examples"
+  ],
+  "author": "JaapRood <jaap@jaaprood.nl>",
+  "license": "ISC",
+  "devDependencies": {
+    "browserify": "^5.11.2",
+    "envify": "^3.0.0",
+    "reactify": "^0.14.0",
+    "watchify": "^1.0.2"
+  },
+  "browserify": {
+    "transform": [
+      "reactify",
+      "envify"
+    ]
+  }
+}
