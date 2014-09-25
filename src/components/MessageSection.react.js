@@ -18,10 +18,13 @@ var MessageStore = require('../stores/MessageStore');
 var React = require('react');
 var ThreadStore = require('../stores/ThreadStore');
 
-function getStateFromStores() {
+function getStateFromStores(context) {
+  var messagesStore = context.getStore('messages'),
+    threadsStore = context.getStore('threads');
+
   return {
-    messages: MessageStore.getAllForCurrentThread(),
-    thread: ThreadStore.getCurrent()
+    messages: messageStore.getAllForCurrentThread(),
+    thread: threadsStore.getCurrent()
   };
 }
 
@@ -42,13 +45,13 @@ var MessageSection = React.createClass({
 
   componentDidMount: function() {
     this._scrollToBottom();
-    MessageStore.addChangeListener(this._onChange);
-    ThreadStore.addChangeListener(this._onChange);
+    this.getStore('messages').addChangeListener(this._onChange);
+    this.getStore('threads').addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function() {
-    MessageStore.removeChangeListener(this._onChange);
-    ThreadStore.removeChangeListener(this._onChange);
+    this.getStore('messages').removeChangeListener(this._onChange);
+    this.getStore('threads').removeChangeListener(this._onChange);
   },
 
   render: function() {
