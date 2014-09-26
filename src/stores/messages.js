@@ -1,5 +1,6 @@
 var util = require('util'),
-	BaseStore = require('dispatchr/utils/BaseStore');
+	BaseStore = require('dispatchr/utils/BaseStore'),
+	Actions = require('app/actions');
 
 function MessageStore(dispatcher) {
 	this.dispatcher = dispatcher;
@@ -8,10 +9,10 @@ function MessageStore(dispatcher) {
 }
 
 MessageStore.storeName = 'messages';
-MessageStore.handlers = {
-	'RECEIVE_MESSAGES': 'receiveMessages',
-	'OPEN_THREAD': 'openThread'
-};
+
+MessageStore.handlers = {};
+MessageStore.handlers[Actions.RECEIVE_MESSAGES] = 'receiveMessages';
+MessageStore.handlers[Actions.CLICK_THREAD] = 'openThread';
 
 util.inherits(MessageStore, BaseStore);
 
@@ -19,14 +20,9 @@ MessageStore.prototype.dehydrate = function() {};
 
 MessageStore.prototype.rehydrate = function() {};
 
+MessageStore.prototype.receiveMessages = function(messages) {};
 
-MessageStore.prototype.receiveMessages = function(messages) {
-
-};
-
-MessageStore.prototype.openThread = function() {
-
-};
+MessageStore.prototype.openThread = function() {};
 
 MessageStore.prototype.getAll = function() {};
 

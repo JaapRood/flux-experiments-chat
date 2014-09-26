@@ -1,5 +1,6 @@
 var util = require('util'),
-	BaseStore = require('dispatchr/utils/BaseStore');
+	BaseStore = require('dispatchr/utils/BaseStore'),
+	Actions = require('app/actions');
 
 function ThreadsStore(dispatcher) {
 	this.dispatchr = dispatcher;
@@ -7,12 +8,11 @@ function ThreadsStore(dispatcher) {
 	this.threads = {};
 }
 
-
 ThreadsStore.storeName = 'threads';
-ThreadsStore.handlers = {
-	'RECEIVE_MESSAGES': 'receiveMessages',
-	'OPEN_THREAD': 'openThread'
-};
+
+ThreadsStore.handlers = {};
+ThreadsStore.handlers[Actions.RECEIVE_MESSAGES] = 'receiveMessages';
+ThreadsStore.handlers[Actions.CLICK_THREAD] = 'openThread';
 
 util.inherits(ThreadsStore, BaseStore);
 
