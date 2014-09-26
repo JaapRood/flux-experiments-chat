@@ -14,9 +14,9 @@
 
 var MessageComposer = require('./MessageComposer.react');
 var MessageListItem = require('./MessageListItem.react');
-var MessageStore = require('../stores/messages');
+var MessageStore = require('app/stores/messages');
 var React = require('react');
-var ThreadStore = require('../stores/threads');
+var ThreadStore = require('app/stores/threads');
 
 function getStateFromStores(context) {
   var messagesStore = context.getStore(MessageStore),
@@ -25,7 +25,9 @@ function getStateFromStores(context) {
   return {
     messages: messageStore.getAllForCurrentThread(),
     thread: threadsStore.getCurrent()
-  };
+
+
+ };
 }
 
 function getMessageListItem(message) {

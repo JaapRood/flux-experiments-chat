@@ -13,10 +13,10 @@
  */
 
 var React = require('react');
-var MessageStore = require('../stores/MessageStore');
-var ThreadListItem = require('../components/ThreadListItem.react');
-var ThreadStore = require('../stores/ThreadStore');
-var UnreadThreadStore = require('../stores/UnreadThreadStore');
+var MessageStore = require('app/stores/messages');
+var ThreadListItem = require('app/components/ThreadListItem.react');
+var ThreadStore = require('app/stores/threads');
+var UnreadThreadStore = require('app/stores/unread-threads');
 
 function getStateFromStores(context) {
   var threadsStore = context.getStore('threads'),

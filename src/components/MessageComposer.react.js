@@ -12,8 +12,7 @@
  * @jsx React.DOM
  */
 
-var ChatMessageActionCreators = require('../actions/ChatMessageActionCreators');
-var MessagesActions = reuqire('app/action-creators/messages');
+var MessagesActions = require('app/action-creators/messages');
 var React = require('react');
 
 var ENTER_KEY_CODE = 13;
