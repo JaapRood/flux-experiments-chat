@@ -13,10 +13,10 @@
  */
 
 var React = require('react');
-// var MessageStore = require('../stores/MessageStore');
+var MessageStore = require('../stores/MessageStore');
 var ThreadListItem = require('../components/ThreadListItem.react');
-// var ThreadStore = require('../stores/ThreadStore');
-// var UnreadThreadStore = require('../stores/UnreadThreadStore');
+var ThreadStore = require('../stores/ThreadStore');
+var UnreadThreadStore = require('../stores/UnreadThreadStore');
 
 function getStateFromStores(context) {
   var threadsStore = context.getStore('threads'),
@@ -36,13 +36,13 @@ var ThreadSection = React.createClass({
   },
 
   componentDidMount: function() {
-    this.getStore('threads').addChangeListener(this._onChange);
-    this.getStore('unread-threads').addChangeListener(this._onChange);
+    this.getStore(ThreadStore).addChangeListener(this._onChange);
+    this.getStore(UnreadThreadStore).addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function() {
-    this.getStore('threads').removeChangeListener(this._onChange);
-    this.getStore('unread-threads').removeChangeListener(this._onChange);
+    this.getStore(ThreadStore).removeChangeListener(this._onChange);
+    this.getStore(UnreadThreadStore).removeChangeListener(this._onChange);
   },
 
   render: function() {

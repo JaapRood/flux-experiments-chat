@@ -13,6 +13,7 @@
  */
 
 var ChatMessageActionCreators = require('../actions/ChatMessageActionCreators');
+var MessagesActions = reuqire('app/action-creators/messages');
 var React = require('react');
 
 var ENTER_KEY_CODE = 13;
@@ -43,7 +44,7 @@ var MessageComposer = React.createClass({
     if (event.keyCode === ENTER_KEY_CODE) {
       var text = this.state.text.trim();
       if (text) {
-        ChatMessageActionCreators.createMessage(text);
+        this.executeAction(MessagesActions.createMessage, text);
       }
       this.setState({text: ''});
     }

@@ -12,7 +12,7 @@
  * @jsx React.DOM
  */
 
-var ChatThreadActionCreators = require('../actions/ChatThreadActionCreators');
+var ThreadsActions = require('app/action-creators/threads');
 var React = require('react');
 var cx = require('react/lib/cx');
 
@@ -47,7 +47,7 @@ var ThreadListItem = React.createClass({
   },
 
   _onClick: function() {
-    ChatThreadActionCreators.clickThread(this.props.thread.id);
+    this.executeAction(ThreadsActions.clickThread, this.props.thread.id);
   }
 
 });

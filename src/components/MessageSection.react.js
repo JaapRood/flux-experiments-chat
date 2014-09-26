@@ -14,13 +14,13 @@
 
 var MessageComposer = require('./MessageComposer.react');
 var MessageListItem = require('./MessageListItem.react');
-var MessageStore = require('../stores/MessageStore');
+var MessageStore = require('../stores/messages');
 var React = require('react');
-var ThreadStore = require('../stores/ThreadStore');
+var ThreadStore = require('../stores/threads');
 
 function getStateFromStores(context) {
-  var messagesStore = context.getStore('messages'),
-    threadsStore = context.getStore('threads');
+  var messagesStore = context.getStore(MessageStore),
+    threadsStore = context.getStore(ThreadStore);
 
   return {
     messages: messageStore.getAllForCurrentThread(),
@@ -45,13 +45,13 @@ var MessageSection = React.createClass({
 
   componentDidMount: function() {
     this._scrollToBottom();
-    this.getStore('messages').addChangeListener(this._onChange);
-    this.getStore('threads').addChangeListener(this._onChange);
+    this.getStore(MessageStore).addChangeListener(this._onChange);
+    this.getStore(ThreadStore).addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function() {
-    this.getStore('messages').removeChangeListener(this._onChange);
-    this.getStore('threads').removeChangeListener(this._onChange);
+    this.getStore(MessageStore).removeChangeListener(this._onChange);
+    this.getStore(ThreadStore).removeChangeListener(this._onChange);
   },
 
   render: function() {
