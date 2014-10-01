@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	React.renderComponent(
 		ChatApp({
-			context: context.componentContext
+			app: context.componentContext
 		}),
 		document.getElementById('react')
 	);
