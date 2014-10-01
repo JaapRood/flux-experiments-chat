@@ -12,11 +12,15 @@
  * @jsx React.DOM
  */
 
-var MessageSection = require('./MessageSection.react');
 var React = require('react');
+var ReactFluxMixin = require('app/lib/react-flux-context-mixin');
+
+var MessageSection = require('./MessageSection.react');
 var ThreadSection = require('./ThreadSection.react');
 
+
 var ChatApp = React.createClass({
+  mixins: [ReactFluxMixin],
 
   getDefaultProps: function() {
     return {
