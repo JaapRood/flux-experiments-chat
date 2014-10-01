@@ -13,8 +13,10 @@
  */
 
 var React = require('react');
+var ReactFluxMixin = require('app/lib/react-flux-context-mixin');
+
 var MessageStore = require('app/stores/messages');
-var ThreadListItem = require('app/components/ThreadListItem.react');
+var ThreadListItem = require('./ThreadListItem.react');
 var ThreadStore = require('app/stores/threads');
 var UnreadThreadStore = require('app/stores/unread-threads');
 
@@ -31,8 +33,10 @@ function getStateFromStores(context) {
 
 var ThreadSection = React.createClass({
 
+  mixins: [ReactFluxMixin],
+
   getInitialState: function() {
-    return getStateFromStores();
+    return getStateFromStores(this.getAppContext());
   },
 
   componentDidMount: function() {
@@ -75,7 +79,7 @@ var ThreadSection = React.createClass({
    * Event handler for 'change' events coming from the stores
    */
   _onChange: function() {
-    this.setState(getStateFromStores());
+    this.setState(getStateFromStores(this.getAppContext()));
   }
 
 });
