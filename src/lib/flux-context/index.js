@@ -29,8 +29,6 @@ function createAppContext() {
 				Dispatcher.registerStore(store);
 			}
 		});
-
-		console.log('done registering stores', Dispatcher.stores);
 	};
 
 	// Get a version of the context as it's meant to be accesible for a component.
