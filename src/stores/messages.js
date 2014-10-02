@@ -81,13 +81,30 @@ MessageStore.prototype.openThread = function(payload) {
 	this.emitChange();
 };
 
-MessageStore.prototype.getAll = function() {};
+MessageStore.prototype.getAll = function() {
+	return this.messages;
+};
 
-MessageStore.prototype.get = function(id) {};
+MessageStore.prototype.get = function(id) {
+	return this.messages.get(id);
+};
 
-MessageStore.prototype.getAllForThread = function(threadId) {};
+MessageStore.prototype.getAllForThread = function(threadId) {
+	var messages = this.messages;
 
-MessageStore.prototype.getAllForCurrentThread = function() {};
+	return this.sortedByDate.map(function(messageId) {
+			return messages.get(messageId);
+		})
+		.filter(function(message) {
+			return message.threadID === threadID;
+		});
+};
+
+MessageStore.prototype.getAllForCurrentThread = function() {
+	var currentThreadId = this.getCurrentThreadID();
+
+	return this.getAllForThread(currentThreadId);
+};
 
 MessageStore.prototype.getCurrentThreadID = function() {
 	var threadsStore = this.dispatch.getStore(ThreadsStore);
