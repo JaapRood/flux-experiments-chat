@@ -2,7 +2,7 @@
   "name": "flux-chat-example",
   "version": "1.0.0",
   "description": "A port of the official flux chat example to try and improve on some of it's concepts",
-  "main": "src/app.js",
+  "main": "./src/app.js",
   "scripts": {
     "start": "watchify -o dist/bundle.js -v -d .",
     "build": "NODE_ENV=production browserify . | uglifyjs -cm > dist/bundle.min.js",
@@ -21,12 +21,7 @@
     "reactify": "^0.14.0",
     "watchify": "^1.0.2"
   },
-  "browserify": {
-    "transform": [
-      "reactify",
-      "envify"
-    ]
-  },
+  "browserify": { "transform": [ "reactify", "envify" ] },
   "dependencies": {
     "dispatchr": "^0.2.5",
     "lodash": "^2.4.1",
