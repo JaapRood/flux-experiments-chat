@@ -64,7 +64,22 @@ MessageStore.prototype.receiveMessages = function(messages) {
 	this.emitChange();
 };
 
-MessageStore.prototype.openThread = function() {};
+MessageStore.prototype.openThread = function(payload) {
+	var threadID = payload.threadID;
+
+	var messagesInThread = this.messages.filter(function(message) {
+		return message.threadID === threadID;
+	});
+
+	this.messages = this.messages.withMutations(function(messages) {
+		messagesInThread.forEach(function(message, messageID) {
+			var newMessage = message.set('isRead', true);
+			messages.set(messageID, newMessage);
+		});
+	});
+
+	this.emitChange();
+};
 
 MessageStore.prototype.getAll = function() {};
 
