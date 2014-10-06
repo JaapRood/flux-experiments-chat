@@ -9,6 +9,7 @@
  * AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+var _ = require('lodash');
 
 module.exports = {
 
@@ -21,6 +22,18 @@ module.exports = {
       text: rawMessage.text,
       isRead: rawMessage.threadID === currentThreadID
     };
+  },
+
+  createByText: function(text, currentThreadID) {
+    return {
+      id: _.uniqueId('ml_'),
+      threadID: currentThreadID,
+      authorName: 'Bill',
+      timestamp: Date.now(),
+      text: text,
+      isRead: true
+    };
   }
+
 
 };

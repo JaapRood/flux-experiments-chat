@@ -1,4 +1,3 @@
-var MessagesActions = require('app/action-creators/messages');
 
 // !!! Please Note !!!
 // We are using localStorage as an example, but in a real-world scenario, this
@@ -10,6 +9,8 @@ var MessagesActions = require('app/action-creators/messages');
 module.exports = {
 
   getAllMessages: function(context) {
+    var MessagesActions = require('app/action-creators/messages');
+
     // simulate retrieving data from a database
     var rawMessages = JSON.parse(localStorage.getItem('messages'));
 
@@ -20,6 +21,7 @@ module.exports = {
   },
 
   createMessage: function(context, message, threadName) {
+    var MessagesActions = require('app/action-creators/messages');
     // simulate writing to a database
     var rawMessages = JSON.parse(localStorage.getItem('messages'));
     var timestamp = Date.now();
@@ -38,7 +40,7 @@ module.exports = {
 
     // simulate success callback
     setTimeout(function() {
-      context.executeAction(MessagesActions.receiveCreatedMessage, createdMessage);
+      context.executeAction(MessagesActions.receiveCreatedMessage, createdMessage, function() {});
     }, 0);
   }
 

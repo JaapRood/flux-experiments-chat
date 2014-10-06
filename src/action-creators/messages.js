@@ -1,11 +1,17 @@
 var Actions = require('app/actions'),
-	Api = require('app/utils/api');
+	Api = require('app/utils/api'),
+	Stores = require('app/store-names'),
+	MessagesUtils = require('app/utils/messages');
 
 module.exports = {
 	create: function(context, text, done) {
-		context.dispatch(Actions.CREATE_MESSAGE, payload);
+		var threadsStore = context.getStore(Stores.THREADS);
 
-		var message = context.getStore('messages').getCreatedMessageData(text);
+		var message = MessagesUtils.createByText(text, threadsStore.getCurrentID());
+
+		console.log(message);
+
+		context.dispatch(Actions.RECEIVE_RAW_MESSAGES, [message]);
 		Api.createMessage(context, message);
 
 		done();
@@ -18,7 +24,7 @@ module.exports = {
 	},
 
 	receiveCreatedMessage: function(context, createdMessage, done) {
-		context.dispatch(Actions.RECEIVE_RAW_CREATED_MESSAGE, createdMessage);
+		context.dispatch(Actions.RECEIVE_RAW_MESSAGE, [createdMessage]);
 
 		done();
 	}

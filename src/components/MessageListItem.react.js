@@ -24,6 +24,7 @@ var MessageListItem = React.createClass({
 
   render: function() {
     var message = this.props.message;
+
     return (
       <li className="message-list-item">
         <h5 className="message-author-name">{message.get('authorName')}</h5>

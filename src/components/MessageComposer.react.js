@@ -12,12 +12,15 @@
  * @jsx React.DOM
  */
 
-var MessagesActions = require('app/action-creators/messages');
 var React = require('react');
+var ReactFluxMixin = require('app/lib/react-flux-context-mixin');
+var MessagesActions = require('app/action-creators/messages');
 
 var ENTER_KEY_CODE = 13;
 
 var MessageComposer = React.createClass({
+
+  mixins: [ReactFluxMixin],
 
   getInitialState: function() {
     return {text: ''};
@@ -43,7 +46,7 @@ var MessageComposer = React.createClass({
     if (event.keyCode === ENTER_KEY_CODE) {
       var text = this.state.text.trim();
       if (text) {
-        this.executeAction(MessagesActions.createMessage, text);
+        this.intentTo(MessagesActions.create, text);
       }
       this.setState({text: ''});
     }

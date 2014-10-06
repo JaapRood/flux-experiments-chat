@@ -50,7 +50,7 @@ ThreadsStore.prototype.receiveMessages = function(rawMessages) {
 			return message.get('threadID');
 		});
 
-		store.threads = messagesByThread.map(function(messagesInThread, threadID) {	
+		store.threads = store.threads.merge(messagesByThread.map(function(messagesInThread, threadID) {	
 			var firstMessage = messagesInThread.first();
 
 			function createThreadFromMessage(message) {
@@ -68,7 +68,7 @@ ThreadsStore.prototype.receiveMessages = function(rawMessages) {
 					return createThreadFromMessage(message);
 				}
 			}, createThreadFromMessage(firstMessage));
-		});
+		}));
 
 		store.emitChange();
 	});

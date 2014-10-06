@@ -21,6 +21,7 @@ MessageStore.storeName = Stores.MESSAGES;
 MessageStore.handlers = {};
 MessageStore.handlers[Actions.RECEIVE_RAW_MESSAGES] = 'receiveMessages';
 MessageStore.handlers[Actions.CLICK_THREAD] = 'openThread';
+MessageStore.handlers[Actions.CREATE_MESSAGE] = 'createMessage';
 
 util.inherits(MessageStore, BaseStore);
 
@@ -43,15 +44,17 @@ MessageStore.prototype.receiveMessages = function(messages) {
 
 	var messageIds = _.pluck(messages, 'id');
 
-	this.messages = IMap.from(_.zip(
+	var newMessages = IMap.from(_.zip(
 		messageIds,
 		_.map(messages, function(message) {
 			return IMap.from(MessagesUtils.convertRawMessage(message, currentThreadId));
 		})
 	));
 
+	this.messages = this.messages.merge(newMessages);
+
 	// Immutable.js gives us OrderedMaps, which might be a candidate to replace this?
-	this.sortedByDate = Vector.from(messageIds)
+	this.sortedByDate = Vector.from(this.messages.keySeq())
 		.sort(function(a, b) {
 			var dateA = store.messages.getIn([a, 'date']),
 				dateB = store.messages.getIn([b, 'date']);
@@ -79,6 +82,12 @@ MessageStore.prototype.openThread = function(threadID) {
 			messages.set(messageID, newMessage);
 		});
 	});
+
+	this.emitChange();
+};
+
+MessageStore.prototype.createMessage = function(message) {
+	this.messages = this.messages.set(message.get('id'), message);
 
 	this.emitChange();
 };
