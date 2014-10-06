@@ -62,9 +62,9 @@ var MessageSection = React.createClass({
     var messageListItems = this.state.messages.map(getMessageListItem);
     return (
       <div className="message-section">
-        <h3 className="message-thread-heading">{this.state.thread.name}</h3>
+        <h3 className="message-thread-heading">{this.state.thread.get('name')}</h3>
         <ul className="message-list" ref="messageList">
-          {messageListItems}
+          {messageListItems.toArray()}
         </ul>
         <MessageComposer />
       </div>

@@ -26,11 +26,11 @@ var MessageListItem = React.createClass({
     var message = this.props.message;
     return (
       <li className="message-list-item">
-        <h5 className="message-author-name">{message.authorName}</h5>
+        <h5 className="message-author-name">{message.get('authorName')}</h5>
         <div className="message-time">
-          {message.date.toLocaleTimeString()}
+          {message.get('date').toLocaleTimeString()}
         </div>
-        <div className="message-text">{message.text}</div>
+        <div className="message-text">{message.get('text')}</div>
       </li>
     );
   }
