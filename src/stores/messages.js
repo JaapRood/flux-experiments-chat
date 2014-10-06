@@ -4,6 +4,7 @@ var util = require('util'),
 	MessagesUtils = require('app/utils/messages'),
 	Stores = require('app/store-names'),
 	Immutable = require('immutable'),
+	_ = require('lodash'),
 
 	IMap = Immutable.Map,
 	Vector = Immutable.Vector;
@@ -18,7 +19,7 @@ function MessageStore(dispatcher) {
 MessageStore.storeName = Stores.MESSAGES;
 
 MessageStore.handlers = {};
-MessageStore.handlers[Actions.RECEIVE_MESSAGES] = 'receiveMessages';
+MessageStore.handlers[Actions.RECEIVE_RAW_MESSAGES] = 'receiveMessages';
 MessageStore.handlers[Actions.CLICK_THREAD] = 'openThread';
 
 util.inherits(MessageStore, BaseStore);
@@ -40,17 +41,20 @@ MessageStore.prototype.receiveMessages = function(messages) {
 
 	var currentThreadId = store.getCurrentThreadID();
 
-	this.messages = this.messages.merge(
-		IMap.from(messages).map(function(message) {
-			return MessagesUtils.convertRawMessage(message, currentThreadId);
+	var messageIds = _.pluck(messages, 'id');
+
+	this.messages = IMap.from(_.zip(
+		messageIds,
+		_.map(messages, function(message) {
+			return IMap.from(MessagesUtils.convertRawMessage(message, currentThreadId));
 		})
-	);
+	));
 
 	// Immutable.js gives us OrderedMaps, which might be a candidate to replace this?
-	this.sortedByDate = Vector.from(this.messages.keySeq())
+	this.sortedByDate = Vector.from(messageIds)
 		.sort(function(a, b) {
-			var dateA = this.messages.getIn([a, 'date']),
-				dateB = this.messages.getIn([b, 'date']);
+			var dateA = store.messages.getIn([a, 'date']),
+				dateB = store.messages.getIn([b, 'date']);
 
 			if (dateA < dateB) {
 				return -1;
@@ -60,6 +64,8 @@ MessageStore.prototype.receiveMessages = function(messages) {
 				return 0;
 			}
 		});
+
+	console.log('received messages in messages store');
 
 	this.emitChange();
 };
