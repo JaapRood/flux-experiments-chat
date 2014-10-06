@@ -20,7 +20,7 @@ Api.getAllMessages(context.componentContext);
 
 var allThreads = context.dispatcher.getStore(StoreNames.THREADS).getAll();
 var firstThread = allThreads.first();
-ThreadsActions.clickThread(context, firstThread.get('id'));
+context.componentContext.executeAction(ThreadsActions.clickThread, firstThread.get('id'));
 
 document.addEventListener('DOMContentLoaded', function() {
 
