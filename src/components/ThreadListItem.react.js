@@ -14,11 +14,14 @@
 
 var ThreadsActions = require('app/action-creators/threads');
 var React = require('react');
+var ReactFluxMixin = require('app/lib/react-flux-context-mixin');
 var cx = require('react/lib/cx');
 
 var ReactPropTypes = React.PropTypes;
 
 var ThreadListItem = React.createClass({
+
+  mixins: [ReactFluxMixin],
 
   propTypes: {
     thread: ReactPropTypes.object,
@@ -47,7 +50,7 @@ var ThreadListItem = React.createClass({
   },
 
   _onClick: function() {
-    this.executeAction(ThreadsActions.clickThread, this.props.thread.get('id'));
+    this.intentTo(ThreadsActions.clickThread, this.props.thread.get('id'));
   }
 
 });

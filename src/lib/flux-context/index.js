@@ -39,14 +39,17 @@ function createAppContext() {
 			dispatcher = this.dispatcher,
 			router = this.router;
 
+		var executeAction = function(actionController, payload) {
+			actionController(context.actionContext, payload, function(err) {
+				if (err) {
+					console.error(err);
+				}
+			});
+		};
+
 		return {
-			executeAction: function(actionController, payload) {
-				actionController(context.actionContext, payload, function(err) {
-					if (err) {
-						console.error(err);
-					}
-				});
-			},
+			executeAction: executeAction,
+			intentTo: executeAction,
 			getStore: dispatcher.getStore.bind(dispatcher),
 			makePath: router.makePath.bind(router)
 		};
