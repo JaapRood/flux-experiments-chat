@@ -75,7 +75,12 @@ ThreadsStore.prototype.receiveMessages = function(rawMessages) {
 };
 
 ThreadsStore.prototype.openThread = function(threadID) {
-	this.currentID = threadID;
+	this.currentID = threadID; // set current id
+
+	this.threads = this.threads.updateIn([threadID, 'lastMessage'], function(lastMessage) {
+		return lastMessage.set('isRead', true);
+	});
+
 	this.emitChange();
 };
 

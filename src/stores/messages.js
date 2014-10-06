@@ -72,9 +72,7 @@ MessageStore.prototype.receiveMessages = function(messages) {
 };
 
 MessageStore.prototype.openThread = function(threadID) {
-	var messagesInThread = this.messages.filter(function(message) {
-		return message.threadID === threadID;
-	});
+	var messagesInThread = this.getAllForThread(threadID);
 
 	this.messages = this.messages.withMutations(function(messages) {
 		messagesInThread.forEach(function(message, messageID) {
@@ -104,7 +102,7 @@ MessageStore.prototype.getAllForThread = function(threadID) {
 	var messages = this.messages;
 
 	return this.sortedByDate.map(function(messageId) {
-			return messages.get(messageId);
+		return messages.get(messageId);
 		})
 		.filter(function(message) {
 			return message.get('threadID') === threadID;
