@@ -91,14 +91,14 @@ MessageStore.prototype.get = function(id) {
 	return this.messages.get(id);
 };
 
-MessageStore.prototype.getAllForThread = function(threadId) {
+MessageStore.prototype.getAllForThread = function(threadID) {
 	var messages = this.messages;
 
 	return this.sortedByDate.map(function(messageId) {
 			return messages.get(messageId);
 		})
 		.filter(function(message) {
-			return message.threadID === threadID;
+			return message.get('threadID') === threadID;
 		});
 };
 
