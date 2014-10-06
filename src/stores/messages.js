@@ -2,20 +2,20 @@ var util = require('util'),
 	BaseStore = require('dispatchr/utils/BaseStore'),
 	Actions = require('app/actions'),
 	MessagesUtils = require('app/utils/messages'),
+	Stores = require('app/store-names'),
 	Immutable = require('immutable'),
 
-	Map = Immutable.Map,
+	IMap = Immutable.Map,
 	Vector = Immutable.Vector;
 
-var ThreadsStore = require('./threads');
 
 function MessageStore(dispatcher) {
 	this.dispatcher = dispatcher;
-	this.messages = Map();
+	this.messages = IMap();
 	this.sortedByDate = Vector();
 }
 
-MessageStore.storeName = 'messages';
+MessageStore.storeName = Stores.MESSAGES;
 
 MessageStore.handlers = {};
 MessageStore.handlers[Actions.RECEIVE_MESSAGES] = 'receiveMessages';
@@ -31,7 +31,7 @@ MessageStore.prototype.dehydrate = function() {
 };
 
 MessageStore.prototype.rehydrate = function(state) {
-	this.messages = Map.from(state.messages);
+	this.messages = IMap.from(state.messages);
 	this.sortedByDate = Vector.from(state.sortedByDate);
 };
 
@@ -41,7 +41,7 @@ MessageStore.prototype.receiveMessages = function(messages) {
 	var currentThreadId = store.getCurrentThreadID();
 
 	this.messages = this.messages.merge(
-		Map.from(messages).map(function(message) {
+		IMap.from(messages).map(function(message) {
 			return MessagesUtils.convertRawMessage(message, currentThreadId);
 		})
 	);
@@ -107,7 +107,7 @@ MessageStore.prototype.getAllForCurrentThread = function() {
 };
 
 MessageStore.prototype.getCurrentThreadID = function() {
-	var threadsStore = this.dispatch.getStore(ThreadsStore);
+	var threadsStore = this.dispatch.getStore(stores.THREADS);
 
 	return threadsStore.getCurrentID();
 };
