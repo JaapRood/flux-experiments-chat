@@ -32,3 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	);
 
 });
+
+// for React debug tools
+window.React = React;
