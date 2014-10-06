@@ -9,8 +9,6 @@ module.exports = {
 
 		var message = MessagesUtils.createByText(text, threadsStore.getCurrentID());
 
-		console.log(message);
-
 		context.dispatch(Actions.RECEIVE_RAW_MESSAGES, [message]);
 		Api.createMessage(context, message);
 
