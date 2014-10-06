@@ -1,6 +1,7 @@
 var util = require('util'),
 	BaseStore = require('dispatchr/utils/BaseStore'),
-	_ = require('lodash');
+	_ = require('lodash'),
+	Stores = require('app/store-names');
 
 /**
  * In the way this is implemented, you could make a point that you don't need this particular 
@@ -13,7 +14,7 @@ function UnreadThreadsStore(dispatcher) {
 	this.dispatcher = dispatcher;
 }
 
-UnreadThreadsStore.storeName = 'unread-threads';
+UnreadThreadsStore.storeName = Stores.UNREAD_THREADS;
 UnreadThreadsStore.handlers = {};
 
 util.inherits(UnreadThreadsStore, BaseStore);
@@ -24,13 +25,12 @@ UnreadThreadsStore.prototype.dehydrate = function() { return {}; };
 UnreadThreadsStore.prototype.rehydrate = function() {};
 
 UnreadThreadsStore.prototype.getCount = function() {
-	var threadsStore = this.dispatcher.getStore('threads');
+	var threadsStore = this.dispatcher.getStore(Stores.THREADS);
+	var threads = threadsStore.getAll();
 
-	var unreadThreads = _.filter(threadsStore, function(thread) {
+	return threads.count(function(thread) {
 		return !thread.lastMessage.isRead;
 	});
-
-	return unreadThreads.length;
 };
 
 
