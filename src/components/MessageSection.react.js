@@ -12,10 +12,12 @@
  * @jsx React.DOM
  */
 
+var React = require('react');
+var ReactFluxMixin = require('app/lib/react-flux-context-mixin');
+
 var MessageComposer = require('./MessageComposer.react');
 var MessageListItem = require('./MessageListItem.react');
 var MessageStore = require('app/stores/messages');
-var React = require('react');
 var ThreadStore = require('app/stores/threads');
 
 function getStateFromStores(context) {
@@ -23,10 +25,8 @@ function getStateFromStores(context) {
     threadsStore = context.getStore(ThreadStore);
 
   return {
-    messages: messageStore.getAllForCurrentThread(),
+    messages: messagesStore.getAllForCurrentThread(),
     thread: threadsStore.getCurrent()
-
-
  };
 }
 
@@ -41,8 +41,10 @@ function getMessageListItem(message) {
 
 var MessageSection = React.createClass({
 
+  mixins: [ReactFluxMixin],
+
   getInitialState: function() {
-    return getStateFromStores();
+    return getStateFromStores(this.getAppContext());
   },
 
   componentDidMount: function() {
@@ -82,7 +84,7 @@ var MessageSection = React.createClass({
    * Event handler for 'change' events coming from the MessageStore
    */
   _onChange: function() {
-    this.setState(getStateFromStores());
+    this.setState(getStateFromStores(this.getAppContext()));
   }
 
 });

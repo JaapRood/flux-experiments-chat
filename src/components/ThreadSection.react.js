@@ -21,8 +21,8 @@ var ThreadStore = require('app/stores/threads');
 var UnreadThreadStore = require('app/stores/unread-threads');
 
 function getStateFromStores(context) {
-  var threadsStore = context.getStore('threads'),
-    unreadThreadsStore = context.getStore('unread-threads');
+  var threadsStore = context.getStore(ThreadStore),
+    unreadThreadsStore = context.getStore(UnreadThreadStore);
 
   return {
     threads: threadsStore.getAllChrono(),

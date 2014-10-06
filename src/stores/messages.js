@@ -107,7 +107,7 @@ MessageStore.prototype.getAllForCurrentThread = function() {
 };
 
 MessageStore.prototype.getCurrentThreadID = function() {
-	var threadsStore = this.dispatch.getStore(stores.THREADS);
+	var threadsStore = this.dispatcher.getStore(Stores.THREADS);
 
 	return threadsStore.getCurrentID();
 };
