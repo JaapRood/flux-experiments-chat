@@ -27,27 +27,27 @@ var ThreadListItem = React.createClass({
 
   render: function() {
     var thread = this.props.thread;
-    var lastMessage = thread.lastMessage;
+    var lastMessage = thread.get('lastMessage');
     return (
       <li
         className={cx({
           'thread-list-item': true,
-          'active': thread.id === this.props.currentThreadID
+          'active': thread.get('id') === this.props.currentThreadID
         })}
         onClick={this._onClick}>
-        <h5 className="thread-name">{thread.name}</h5>
+        <h5 className="thread-name">{thread.get('name')}</h5>
         <div className="thread-time">
-          {lastMessage.date.toLocaleTimeString()}
+          {lastMessage.get('date').toLocaleTimeString()}
         </div>
         <div className="thread-last-message">
-          {lastMessage.text}
+          {lastMessage.get('text')}
         </div>
       </li>
     );
   },
 
   _onClick: function() {
-    this.executeAction(ThreadsActions.clickThread, this.props.thread.id);
+    this.executeAction(ThreadsActions.clickThread, this.props.thread.get('id'));
   }
 
 });
