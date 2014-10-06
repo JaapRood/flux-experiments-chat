@@ -29,7 +29,7 @@ UnreadThreadsStore.prototype.getCount = function() {
 	var threads = threadsStore.getAll();
 
 	return threads.count(function(thread) {
-		return !thread.lastMessage.isRead;
+		return !thread.getIn(['lastMessage', 'isRead']);
 	});
 };
 

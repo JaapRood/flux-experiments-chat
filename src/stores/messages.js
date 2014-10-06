@@ -65,14 +65,10 @@ MessageStore.prototype.receiveMessages = function(messages) {
 			}
 		});
 
-	console.log('received messages in messages store');
-
 	this.emitChange();
 };
 
-MessageStore.prototype.openThread = function(payload) {
-	var threadID = payload.threadID;
-
+MessageStore.prototype.openThread = function(threadID) {
 	var messagesInThread = this.messages.filter(function(message) {
 		return message.threadID === threadID;
 	});

@@ -1,23 +1,24 @@
 var util = require('util'),
 	BaseStore = require('dispatchr/utils/BaseStore'),
 	Actions = require('app/actions'),
-	stores = require('app/store-names'),
+	Stores = require('app/store-names'),
 	Immutable = require('immutable'),
 	MessagesUtils = require('app/utils/messages'),
+	_ = require('lodash'),
 
 	IMap = Immutable.Map,
 	Vector = Immutable.Vector;
 
 function ThreadsStore(dispatcher) {
-	this.dispatchr = dispatcher;
+	this.dispatcher = dispatcher;
 	this.currentId = null;
 	this.threads = IMap();
 }
 
-ThreadsStore.storeName = stores.THREADS;
+ThreadsStore.storeName = Stores.THREADS;
 
 ThreadsStore.handlers = {};
-ThreadsStore.handlers[Actions.RECEIVE_MESSAGES] = 'receiveMessages';
+ThreadsStore.handlers[Actions.RECEIVE_RAW_MESSAGES] = 'receiveMessages';
 ThreadsStore.handlers[Actions.CLICK_THREAD] = 'openThread';
 
 util.inherits(ThreadsStore, BaseStore);
@@ -34,41 +35,47 @@ ThreadsStore.prototype.rehydrate = function(state) {
 	this.threads = IMap.from(state.threads);
 };
 
-ThreadsStore.prototype.receiveMessages = function(messages) {
+ThreadsStore.prototype.receiveMessages = function(rawMessages) {
 	var store = this,
 		dispatcher = this.dispatcher;
 
-	messages = IMap.from(messages);
+	var messagesStore = dispatcher.getStore(Stores.MESSAGES);
 
-	var messagesByThread = messages.groupBy(function(message) {
-		return message.threadID;
-	});
+	dispatcher.waitFor(Stores.MESSAGES, function() {
+		var messages = Vector.from(_.map(rawMessages, function(message) {
+			return messagesStore.get(message.id);
+		}));
 
-	this.threads = messagesByThread.map(function(messagesInThread, threadID) {	
-		var firstMessage = messagesInThread.first();
+		var messagesByThread = messages.groupBy(function(message) {
+			return message.get('threadID');
+		});
 
-		function createThreadFromMessage(message) {
-			return IMap({
-				id: threadID,
-				name: message.threadName,
-				lastMessage: MessagesUtils.convertRawMessage(message)
-			});
-		}
+		store.threads = messagesByThread.map(function(messagesInThread, threadID) {	
+			var firstMessage = messagesInThread.first();
 
-		return messagesInThread.reduce(function(thread, message) {
-			if (thread.lastMessage.date > message.date) {
-				return thread;
-			} else {
-				return createThreadFromMessage(message);
+			function createThreadFromMessage(message) {
+				return IMap({
+					id: threadID,
+					name: message.get('threadName'),
+					lastMessage: message
+				});
 			}
-		}, createThreadFromMessage(firstMessage));
-	});
 
-	this.emitChange();
+			return messagesInThread.reduce(function(thread, message) {
+				if (thread.get('lastMessage').get('date') > message.get('date')) {
+					return thread;
+				} else {
+					return createThreadFromMessage(message);
+				}
+			}, createThreadFromMessage(firstMessage));
+		});
+
+		store.emitChange();
+	});
 };
 
-ThreadsStore.prototype.openThread = function(payload) {
-	this.currentID = payload.threadID;
+ThreadsStore.prototype.openThread = function(threadID) {
+	this.currentID = threadID;
 	this.emitChange();
 };
 
@@ -84,8 +91,8 @@ ThreadsStore.prototype.getAllChrono = function() {
 	var store = this;
 
 	return this.threads.sort(function(a, b) {
-		var aDate = a.lastMessage.date,
-			bDate = b.lastMessage.date;
+		var aDate = a.getIn(['lastMessage', 'date']),
+			bDate = b.getIn(['lastMessage', 'date']);
 
 		if (aDate < bDate) {
 			return -1;
