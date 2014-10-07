@@ -14,6 +14,7 @@
 
 var React = require('react');
 var ReactFluxMixin = require('app/lib/react-flux-context-mixin');
+var ImmutableMixin = require('app/lib/react-immutable-mixin');
 
 var MessageComposer = require('./MessageComposer.react');
 var MessageListItem = require('./MessageListItem.react');
@@ -41,7 +42,7 @@ function getMessageListItem(message) {
 
 var MessageSection = React.createClass({
 
-  mixins: [ReactFluxMixin],
+  mixins: [ReactFluxMixin, ImmutableMixin],
 
   getInitialState: function() {
     return getStateFromStores(this.getAppContext());

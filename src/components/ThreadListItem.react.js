@@ -15,13 +15,15 @@
 var ThreadsActions = require('app/action-creators/threads');
 var React = require('react');
 var ReactFluxMixin = require('app/lib/react-flux-context-mixin');
+var ImmutableMixin = require('app/lib/react-immutable-mixin');
+
 var cx = require('react/lib/cx');
 
 var ReactPropTypes = React.PropTypes;
 
 var ThreadListItem = React.createClass({
 
-  mixins: [ReactFluxMixin],
+  mixins: [ReactFluxMixin, ImmutableMixin],
 
   propTypes: {
     thread: ReactPropTypes.object,

@@ -14,11 +14,14 @@
 
 var React = require('react');
 var ReactFluxMixin = require('app/lib/react-flux-context-mixin');
+var ImmutableMixin = require('app/lib/react-immutable-mixin');
 
 var MessageStore = require('app/stores/messages');
 var ThreadListItem = require('./ThreadListItem.react');
 var ThreadStore = require('app/stores/threads');
 var UnreadThreadStore = require('app/stores/unread-threads');
+
+var _ = require('lodash');
 
 function getStateFromStores(context) {
   var threadsStore = context.getStore(ThreadStore),
@@ -33,7 +36,7 @@ function getStateFromStores(context) {
 
 var ThreadSection = React.createClass({
 
-  mixins: [ReactFluxMixin],
+  mixins: [ReactFluxMixin, ImmutableMixin],
 
   getInitialState: function() {
     return getStateFromStores(this.getAppContext());

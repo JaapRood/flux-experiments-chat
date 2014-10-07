@@ -13,10 +13,13 @@
  */
 
 var React = require('react');
+var ImmutableMixin = require('app/lib/react-immutable-mixin');
 
 var ReactPropTypes = React.PropTypes;
 
 var MessageListItem = React.createClass({
+
+  mixins: [ImmutableMixin],
 
   propTypes: {
     message: ReactPropTypes.object
