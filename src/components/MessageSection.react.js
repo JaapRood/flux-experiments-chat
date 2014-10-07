@@ -25,10 +25,12 @@ function getStateFromStores(context) {
   var messagesStore = context.getStore(MessageStore),
     threadsStore = context.getStore(ThreadStore);
 
-  return {
+  var state = {
     messages: messagesStore.getAllForCurrentThread(),
     thread: threadsStore.getCurrent()
  };
+
+ return state;
 }
 
 function getMessageListItem(message) {
@@ -42,7 +44,10 @@ function getMessageListItem(message) {
 
 var MessageSection = React.createClass({
 
-  mixins: [ReactFluxMixin, ImmutableMixin],
+  mixins: [
+    // ImmutableMixin,
+    ReactFluxMixin
+  ],
 
   getInitialState: function() {
     return getStateFromStores(this.getAppContext());
