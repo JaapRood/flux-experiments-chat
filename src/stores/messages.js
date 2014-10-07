@@ -75,9 +75,9 @@ MessageStore.prototype.openThread = function(threadID) {
 	var messagesInThread = this.getAllForThread(threadID);
 
 	this.messages = this.messages.withMutations(function(messages) {
-		messagesInThread.forEach(function(message, messageID) {
+		messagesInThread.forEach(function(message) {
 			var newMessage = message.set('isRead', true);
-			messages.set(messageID, newMessage);
+			messages.set(message.get('id'), newMessage);
 		});
 	});
 
