@@ -46,3 +46,17 @@ React.renderComponent(App({ state: state }), el);
 Such an approach would also open up the doors to stuff like using something like `Bacon.js` to manage state over time.
 
 A first step in making that work is to see if we can create one root Map which holds references to the individual stores, using cursors to let the stores manage state locally while still making it back to the root object.
+
+
+## A simple App object (Bly?)
+
+Right now we're using AppContex, which is the glue between the pieces of the app. However, lot's of it tailored to the exact app, and to change any of it, you'll have to change the context. The idea of the app's components being RESTful got me thinking: with immutable models and React as a view layer, we *are* starting to look more like the server. So what if we provided a very minimalistic framework as they exist for HTTP servers like Hapi / Express (or others in other languages) and applied some of those same ideas to the client side with Flux. Instead of Requests, you'd have Actions, instead of registering for Routes, you register for action names. 
+
+I've tried the Hapi framework in a couple of places now and am really impressed with how it gives you just all you need to do the basics well. It's pretty unopinionated (at least in my view) about how to build the rest of your server, which makes it a great little framework to build the rest of your application on. All it's concerned with is doing the few things that HTTP servers all do well, and extensively. 
+
+What I like about Hapi that I think could be of great benefit:
+
+- **How it does code organisation through it's plugins.** There is basically a `server` interface, which has some basics like `server.route()` to register a handler for a given route, `server.state()` to handle state, `server.log()` to do logging, among some other things. What is really impressive, though, is `server.register()`, which allows you to register a plugin. A plugin definition is a function with the signature of `function(plugin, options, next)`. The `plugin` argument has an interface almost completely the same to `server` with all the same methods described. The result is a really easy way to create units of code in your app and move them around.
+
+- **How it validates the configuration you've made before the server is started**. It's all pretty declarative. Which makes that before the server starts, Hapi can halt that if it sees reason to. For example, it checks whether any of the routes are ambigious, which is a source of unwanted behaviour and subtle bugs (as the order in which the handlers are executed can start to matter). 
+
