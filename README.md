@@ -60,3 +60,45 @@ What I like about Hapi that I think could be of great benefit:
 
 - **How it validates the configuration you've made before the server is started**. It's all pretty declarative. Which makes that before the server starts, Hapi can halt that if it sees reason to. For example, it checks whether any of the routes are ambigious, which is a source of unwanted behaviour and subtle bugs (as the order in which the handlers are executed can start to matter). 
 
+
+### What would that look like?
+
+```js
+
+// create an app
+var app = Bly.createApp();
+
+// register for an action
+app.action({
+	name: 'RECEIVE_RAW_MESSAGES',
+	handler: function(action) {},
+	validate: {
+		payload: Joi.schema()
+	}
+});
+
+// define how the app is to be rendered
+app.render(function(state) {
+	React.renderComponent(AppComponent({
+		state: state,
+		injectAction: app.inject
+	}), document.documentElement);
+});
+
+// start the app
+app.start(function(err) {
+	if (err) { // if anything went wrong setting it all up
+		return console.log(err);
+	}
+
+	// execute an action
+	app.inject({
+		name: 'RECEIVE_MESSAGES',
+		payload: [message1, message2]
+	});
+
+});
+
+```
+
+The API above are the things I'm pretty certain about. The app itself will let you register for actions and includes a dispatcher of its own. The thing that I'm not sure about is how to add stores to the equation. We could do something like `app.state('messages', MessagesStore)`, but then maybe they should just be defined as plugins. I guess we'll just have to start building this thing and find out.
