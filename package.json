@@ -19,6 +19,7 @@
     "browserify": "^5.11.2",
     "envify": "^3.0.0",
     "reactify": "^0.14.0",
+    "tape": "^3.0.0",
     "watchify": "^1.0.2"
   },
   "browserify": {
@@ -29,6 +30,7 @@
   },
   "dependencies": {
     "dispatchr": "^0.2.5",
+    "hoek": "^2.5.0",
     "immutable": "^2.0.17",
     "lodash": "^2.4.1",
     "react": "^0.11.2",
