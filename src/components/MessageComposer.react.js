@@ -13,14 +13,14 @@
  */
 
 var React = require('react');
-var ReactFluxMixin = require('app/lib/react-flux-context-mixin');
+var BlyMixin = require('app/lib/react-bly-context-mixin');
 var MessagesActions = require('app/action-creators/messages');
 
 var ENTER_KEY_CODE = 13;
 
 var MessageComposer = React.createClass({
 
-  mixins: [ReactFluxMixin],
+  mixins: [BlyMixin],
 
   getInitialState: function() {
     return {text: ''};

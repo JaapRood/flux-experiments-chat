@@ -13,7 +13,7 @@
  */
 
 var React = require('react');
-var ReactFluxMixin = require('app/lib/react-flux-context-mixin');
+var BlyMixin = require('app/lib/react-bly-context-mixin');
 var ImmutableMixin = require('app/lib/react-immutable-mixin');
 
 var MessageComposer = require('./MessageComposer.react');
@@ -21,9 +21,9 @@ var MessageListItem = require('./MessageListItem.react');
 var MessageStore = require('app/stores/messages');
 var ThreadStore = require('app/stores/threads');
 
-function getStateFromStores(context) {
-  var messagesStore = context.getStore(MessageStore),
-    threadsStore = context.getStore(ThreadStore);
+function getStateFromStores(stores) {
+  var messagesStore = stores.get(MessageStore),
+    threadsStore = stores.get(ThreadStore);
 
   var state = {
     messages: messagesStore.getAllForCurrentThread(),
@@ -45,12 +45,12 @@ function getMessageListItem(message) {
 var MessageSection = React.createClass({
 
   mixins: [
-    // ImmutableMixin,
-    ReactFluxMixin
+    ImmutableMixin,
+    BlyMixin
   ],
 
   getInitialState: function() {
-    return getStateFromStores(this.getAppContext());
+    return getStateFromStores(this.stores());
   },
 
   componentDidMount: function() {
@@ -90,7 +90,7 @@ var MessageSection = React.createClass({
    * Event handler for 'change' events coming from the MessageStore
    */
   _onChange: function() {
-    this.setState(getStateFromStores(this.getAppContext()));
+    this.setState(getStateFromStores(this.stores()));
   }
 
 });

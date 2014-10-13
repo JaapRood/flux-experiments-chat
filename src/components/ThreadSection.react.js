@@ -13,7 +13,8 @@
  */
 
 var React = require('react');
-var ReactFluxMixin = require('app/lib/react-flux-context-mixin');
+// var ReactFluxMixin = require('app/lib/react-flux-context-mixin');
+var BlyMixin = require('app/lib/react-bly-context-mixin');
 var ImmutableMixin = require('app/lib/react-immutable-mixin');
 
 var MessageStore = require('app/stores/messages');
@@ -23,9 +24,9 @@ var UnreadThreadStore = require('app/stores/unread-threads');
 
 var _ = require('lodash');
 
-function getStateFromStores(context) {
-  var threadsStore = context.getStore(ThreadStore),
-    unreadThreadsStore = context.getStore(UnreadThreadStore);
+function getStateFromStores(stores) {
+  var threadsStore = stores.get(ThreadStore),
+    unreadThreadsStore = stores.get(UnreadThreadStore);
 
   return {
     threads: threadsStore.getAllChrono(),
@@ -36,10 +37,10 @@ function getStateFromStores(context) {
 
 var ThreadSection = React.createClass({
 
-  mixins: [ReactFluxMixin, ImmutableMixin],
+  mixins: [BlyMixin, ImmutableMixin],
 
   getInitialState: function() {
-    return getStateFromStores(this.getAppContext());
+    return getStateFromStores(this.stores());
   },
 
   componentDidMount: function() {
@@ -82,7 +83,7 @@ var ThreadSection = React.createClass({
    * Event handler for 'change' events coming from the stores
    */
   _onChange: function() {
-    this.setState(getStateFromStores(this.getAppContext()));
+    this.setState(getStateFromStores(this.stores()));
   }
 
 });
