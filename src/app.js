@@ -13,8 +13,8 @@ var ExampleData = require('./example-data'),
 
 var app = new Bly.App();
 
-// register stores
-var stores = new StoresManager(app, Stores);
+// register stores (app should probably have a 'safe' place to attach properties to)
+app.stores = new StoresManager(app, Stores);
 
 // initial data and start
 ExampleData.init();
@@ -27,13 +27,13 @@ Api.getAllMessages(function(err, raw_messages) {
 	app.inject('RECEIVE_RAW_MESSAGES', raw_messages);
 });
 
+
 // as soon as the DOM is ready we'll start rendering the app
 document.addEventListener('DOMContentLoaded', function() {
 	app.render(function() {
 		React.renderComponent(
 			ChatApp({
-				stores: stores.getAll(),
-				intentTo: app.inject
+				app: app
 			}),
 
 			document.getElementById('react')
