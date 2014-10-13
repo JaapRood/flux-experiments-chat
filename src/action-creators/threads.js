@@ -1,9 +1,7 @@
 var Actions = require('app/actions');
 
 module.exports = {
-	clickThread: function(context, threadId, done) {
-		context.dispatch(Actions.CLICK_THREAD, threadId);
-
-		done();
+	clickThread: function(app, threadId) {
+		app.inject(Actions.CLICK_THREAD, threadId);
 	}	
 };
