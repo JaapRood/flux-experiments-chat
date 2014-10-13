@@ -10,8 +10,8 @@ var util = require('util'),
 	Vector = Immutable.Vector;
 
 
-function MessageStore(dispatcher) {
-	this.dispatcher = dispatcher;
+function MessageStore(getStore) {
+	this.getStore = getStore;
 	this.messages = IMap();
 	this.sortedByDate = Vector();
 }
@@ -37,7 +37,7 @@ MessageStore.prototype.rehydrate = function(state) {
 	this.sortedByDate = Vector.from(state.sortedByDate);
 };
 
-MessageStore.prototype.receiveMessages = function(messages) {
+MessageStore.prototype.receiveMessages = function(waitFor, messages) {
 	var store = this;
 
 	var currentThreadId = store.getCurrentThreadID();
@@ -71,7 +71,7 @@ MessageStore.prototype.receiveMessages = function(messages) {
 	this.emitChange();
 };
 
-MessageStore.prototype.openThread = function(threadID) {
+MessageStore.prototype.openThread = function(waitFor, threadID) {
 	var messagesInThread = this.getAllForThread(threadID);
 
 	this.messages = this.messages.withMutations(function(messages) {
@@ -116,7 +116,7 @@ MessageStore.prototype.getAllForCurrentThread = function() {
 };
 
 MessageStore.prototype.getCurrentThreadID = function() {
-	var threadsStore = this.dispatcher.getStore(Stores.THREADS);
+	var threadsStore = this.getStore(Stores.THREADS);
 
 	return threadsStore.getCurrentID();
 };

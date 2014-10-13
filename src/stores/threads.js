@@ -9,8 +9,8 @@ var util = require('util'),
 	IMap = Immutable.Map,
 	Vector = Immutable.Vector;
 
-function ThreadsStore(dispatcher) {
-	this.dispatcher = dispatcher;
+function ThreadsStore(getStore) {
+	this.getStore = getStore;
 	this.currentId = null;
 	this.threads = IMap();
 }
@@ -35,13 +35,13 @@ ThreadsStore.prototype.rehydrate = function(state) {
 	this.threads = IMap.from(state.threads);
 };
 
-ThreadsStore.prototype.receiveMessages = function(rawMessages) {
+ThreadsStore.prototype.receiveMessages = function(waitFor, rawMessages) {
 	var store = this,
-		dispatcher = this.dispatcher;
+		getStore = this.getStore;
 
-	var messagesStore = dispatcher.getStore(Stores.MESSAGES);
+	var messagesStore = getStore(Stores.MESSAGES);
 
-	dispatcher.waitFor(Stores.MESSAGES, function() {
+	waitFor(Stores.MESSAGES, function() {
 		var messages = Vector.from(_.map(rawMessages, function(message) {
 			return messagesStore.get(message.id);
 		}));
@@ -74,7 +74,7 @@ ThreadsStore.prototype.receiveMessages = function(rawMessages) {
 	});
 };
 
-ThreadsStore.prototype.openThread = function(threadID) {
+ThreadsStore.prototype.openThread = function(waitFor, threadID) {
 	this.currentID = threadID; // set current id
 
 	this.threads = this.threads.updateIn([threadID, 'lastMessage'], function(lastMessage) {
@@ -122,3 +122,17 @@ ThreadsStore.prototype.getCurrent = function() {
 };
 
 module.exports = ThreadsStore;
+
+
+// module.exports.register = function(plugin, options) {
+// 	var threads = new ThreadsStore();
+
+// 	plugin.action({
+// 		name: Actions.RECEIVE_RAW_MESSAGES,
+
+// 		handler: function(waitFor, threads) {
+// 			waitFor(MessagesStore.name);
+// 		},
+// 		ref: ThreadsStore.name
+// 	});
+// };

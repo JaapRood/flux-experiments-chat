@@ -8,7 +8,7 @@
 
 module.exports = {
 
-  getAllMessages: function(context) {
+  getAllMessages: function(cb) {
     var MessagesActions = require('app/action-creators/messages');
 
     // simulate retrieving data from a database
@@ -16,11 +16,10 @@ module.exports = {
 
 
 
-    // simulate success callback
-    context.executeAction(MessagesActions.receiveAll, rawMessages);
+    cb(null, rawMessages);
   },
 
-  createMessage: function(context, message, threadName) {
+  createMessage: function(message, threadName, cb) {
     var MessagesActions = require('app/action-creators/messages');
     // simulate writing to a database
     var rawMessages = JSON.parse(localStorage.getItem('messages'));
@@ -40,7 +39,8 @@ module.exports = {
 
     // simulate success callback
     setTimeout(function() {
-      context.executeAction(MessagesActions.receiveCreatedMessage, createdMessage, function() {});
+      cb(null, createdMessage);
+      // context.executeAction(MessagesActions.receiveCreatedMessage, createdMessage, function() {});
     }, 0);
   }
 

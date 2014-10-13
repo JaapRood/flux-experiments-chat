@@ -10,8 +10,8 @@ var util = require('util'),
  * as well.
  */
 
-function UnreadThreadsStore(dispatcher) {
-	this.dispatcher = dispatcher;
+function UnreadThreadsStore(getStore) {
+	this.getStore = getStore;
 }
 
 UnreadThreadsStore.storeName = Stores.UNREAD_THREADS;
@@ -25,7 +25,7 @@ UnreadThreadsStore.prototype.dehydrate = function() { return {}; };
 UnreadThreadsStore.prototype.rehydrate = function() {};
 
 UnreadThreadsStore.prototype.getCount = function() {
-	var threadsStore = this.dispatcher.getStore(Stores.THREADS);
+	var threadsStore = this.getStore(Stores.THREADS);
 	var threads = threadsStore.getAll();
 
 	return threads.count(function(thread) {
