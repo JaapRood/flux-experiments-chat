@@ -5,6 +5,7 @@ var React = require('react'),
 	StoresManager = require('./stores-manager'),
 	StoreNames = require('./store-names'),
 	ThreadsActions = require('./action-creators/threads'),
+	MessagesActions = require('./action-creators/messages'),
 	Bly = require('app/lib/bly');
 
 var ExampleData = require('./example-data'),
@@ -21,10 +22,15 @@ ExampleData.init();
 
 app.start(); // not sure if we're going to really need this idea of starting the app
 
-Api.getAllMessages(function(err, raw_messages) {
+Api.getAllMessages(function(err, rawMessages) {
 	if (err) return console.error(err);
 
-	app.inject('RECEIVE_RAW_MESSAGES', raw_messages);
+	MessagesActions.receiveAll(app, rawMessages)
+
+	var allThreads = app.stores.get(StoreNames.THREADS).getAll();
+	var firstThread = allThreads.first();
+
+	ThreadsActions.clickThread(app, firstThread.get('id'));
 });
 
 
