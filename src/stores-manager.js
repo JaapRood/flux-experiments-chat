@@ -1,4 +1,5 @@
 var _ = require('lodash');
+	invariant = require('app/lib/bly/lib/invariant');
 
 var internals = {};
 
@@ -34,6 +35,13 @@ exports = module.exports = internals.StoresManager = function(app, stores) {
 }
 
 internals.StoresManager.prototype.get = function(name) {
+	if (_.isFunction(name)) {
+		// accept functions that have a 'storeName' attribute
+		name = name.storeName;
+	}
+
+	invariant(name, "A name (string) or function with a 'storeName' property is required to get a store");
+
 	var store = this.byName[name];
 
 	if (!store) {
