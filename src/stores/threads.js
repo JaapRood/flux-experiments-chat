@@ -41,37 +41,35 @@ ThreadsStore.prototype.receiveMessages = function(waitFor, rawMessages) {
 
 	var messagesStore = getStore(Stores.MESSAGES);
 
-	waitFor(Stores.MESSAGES, function() {
-		var messages = Vector.from(_.map(rawMessages, function(message) {
-			return messagesStore.get(message.id);
-		}));
+	waitFor(Stores.MESSAGES);
+	
+	var messages = Vector.from(_.map(rawMessages, function(message) {
+		return messagesStore.get(message.id);
+	}));
 
-		var messagesByThread = messages.groupBy(function(message) {
-			return message.get('threadID');
-		});
-
-		store.threads = store.threads.merge(messagesByThread.map(function(messagesInThread, threadID) {	
-			var firstMessage = messagesInThread.first();
-
-			function createThreadFromMessage(message) {
-				return IMap({
-					id: threadID,
-					name: message.get('threadName'),
-					lastMessage: message
-				});
-			}
-
-			return messagesInThread.reduce(function(thread, message) {
-				if (thread.get('lastMessage').get('date') > message.get('date')) {
-					return thread;
-				} else {
-					return createThreadFromMessage(message);
-				}
-			}, createThreadFromMessage(firstMessage));
-		}));
-
-		store.emitChange();
+	var messagesByThread = messages.groupBy(function(message) {
+		return message.get('threadID');
 	});
+
+	store.threads = store.threads.merge(messagesByThread.map(function(messagesInThread, threadID) {	
+		var firstMessage = messagesInThread.first();
+
+		function createThreadFromMessage(message) {
+			return IMap({
+				id: threadID,
+				name: message.get('threadName'),
+				lastMessage: message
+			});
+		}
+
+		return messagesInThread.reduce(function(thread, message) {
+			if (thread.get('lastMessage').get('date') > message.get('date')) {
+				return thread;
+			} else {
+				return createThreadFromMessage(message);
+			}
+		}, createThreadFromMessage(firstMessage));
+	}));
 };
 
 ThreadsStore.prototype.openThread = function(waitFor, threadID) {
@@ -80,8 +78,6 @@ ThreadsStore.prototype.openThread = function(waitFor, threadID) {
 	this.threads = this.threads.updateIn([threadID, 'lastMessage'], function(lastMessage) {
 		return lastMessage.set('isRead', true);
 	});
-
-	this.emitChange();
 };
 
 ThreadsStore.prototype.get = function(id) {

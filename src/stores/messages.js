@@ -67,8 +67,6 @@ MessageStore.prototype.receiveMessages = function(waitFor, messages) {
 				return 0;
 			}
 		});
-
-	this.emitChange();
 };
 
 MessageStore.prototype.openThread = function(waitFor, threadID) {
@@ -80,14 +78,10 @@ MessageStore.prototype.openThread = function(waitFor, threadID) {
 			messages.set(message.get('id'), newMessage);
 		});
 	});
-
-	this.emitChange();
 };
 
 MessageStore.prototype.createMessage = function(message) {
 	this.messages = this.messages.set(message.get('id'), message);
-
-	this.emitChange();
 };
 
 MessageStore.prototype.getAll = function() {
