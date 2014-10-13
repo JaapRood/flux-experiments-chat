@@ -16,7 +16,7 @@ var React = require('react'),
 function createMixin(getNewAppContext, prop) {
     if (!getNewAppContext) {
         // by default just a function that returns an empty object
-        getNewAppContext = function(component) { return {}; };
+        getNewAppContext = function(props) { return {}; };
     }
 
     // by default use the 'app' property for transport
@@ -37,7 +37,7 @@ function createMixin(getNewAppContext, prop) {
             } else if (this.context[prop]) {
                 return this.context[prop];
             } else {
-                return getNewAppContext(this);
+                return getNewAppContext(this.props);
             }
         },
 
