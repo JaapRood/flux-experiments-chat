@@ -9,8 +9,7 @@ var MessagesActions = {
 
 		var message = MessagesUtils.createByText(text, threadsStore.getCurrentID());
 
-		app.inject(Actions.RECEIVE_RAW_MESSAGES, [message]);
-		Api.createMessage(message, function(err, message) {
+		Api.createMessage(message, null, function(err, message) {
 			if (err) return console.error(err);
 
 			MessagesActions.receiveCreatedMessage(app, message);
