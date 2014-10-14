@@ -26,15 +26,15 @@ mixin.getStore = function(name) {
 
 mixin.intentTo = function(actionNameOrCreator) {
 	var context = this.getAppContext(),
-		app = context.app;
+		app = context.app,
+		args = _.rest(_.toArray(arguments), 1); // get rid of the first argument
 
 	if (_.isFunction(actionNameOrCreator)) {
-		var args = _.toArray(arguments);
 		args.unshift(app);
 
 		actionNameOrCreator.apply(null, args);
 	} else {
-		app.inject.apply(app, arguments);
+		app.inject.apply(app, args);
 	}
 
 	return;	
