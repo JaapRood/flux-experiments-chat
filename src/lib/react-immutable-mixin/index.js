@@ -15,12 +15,18 @@ function hasChanged(current, next) {
 
 		// default to true if we're not dealing with an immutable sequence
 		if (!(currentValue instanceof Immutable.Sequence) || !(nextValue instanceof Immutable.Sequence)) {
+
+
+			// numbers and strings are immutable
+			if (_.isNumber(currentValue) || _.isString(currentValue)) {
+				return currentValue === nextValue;
+			} 
+
 			return true;
 		}
 
-
 		// check for equality
-		return Immutable.is(currentValue, nextValue);
+		return !Immutable.is(currentValue, nextValue);
 	});
 }
 
