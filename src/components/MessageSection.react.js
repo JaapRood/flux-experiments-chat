@@ -36,7 +36,7 @@ function getStateFromStores(stores) {
 function getMessageListItem(message) {
   return (
     <MessageListItem
-      key={message.id}
+      key={message.get('id')}
       message={message}
     />
   );
