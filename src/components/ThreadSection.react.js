@@ -51,7 +51,7 @@ var ThreadSection = React.createClass({
     var threadListItems = this.state.threads.map(function(thread) {
       return (
         <ThreadListItem
-          key={thread.id}
+          key={thread.get('id')}
           thread={thread}
           currentThreadID={this.state.currentThreadID}
         />
