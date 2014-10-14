@@ -45,8 +45,8 @@ function getMessageListItem(message) {
 var MessageSection = React.createClass({
 
   mixins: [
-    ImmutableMixin,
-    BlyMixin
+    BlyMixin,
+    ImmutableMixin
   ],
 
   getInitialState: function() {
@@ -55,13 +55,10 @@ var MessageSection = React.createClass({
 
   componentDidMount: function() {
     this._scrollToBottom();
-    this.getStore(MessageStore).addChangeListener(this._onChange);
-    this.getStore(ThreadStore).addChangeListener(this._onChange);
   },
 
-  componentWillUnmount: function() {
-    this.getStore(MessageStore).removeChangeListener(this._onChange);
-    this.getStore(ThreadStore).removeChangeListener(this._onChange);
+  componentWillReceiveProps: function(newProps) {
+    this.setState(getStateFromStores(this.stores()));
   },
 
   render: function() {
@@ -84,13 +81,6 @@ var MessageSection = React.createClass({
   _scrollToBottom: function() {
     var ul = this.refs.messageList.getDOMNode();
     ul.scrollTop = ul.scrollHeight;
-  },
-
-  /**
-   * Event handler for 'change' events coming from the MessageStore
-   */
-  _onChange: function() {
-    this.setState(getStateFromStores(this.stores()));
   }
 
 });

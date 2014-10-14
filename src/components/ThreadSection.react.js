@@ -43,14 +43,8 @@ var ThreadSection = React.createClass({
     return getStateFromStores(this.stores());
   },
 
-  componentDidMount: function() {
-    this.getStore(ThreadStore).addChangeListener(this._onChange);
-    this.getStore(UnreadThreadStore).addChangeListener(this._onChange);
-  },
-
-  componentWillUnmount: function() {
-    this.getStore(ThreadStore).removeChangeListener(this._onChange);
-    this.getStore(UnreadThreadStore).removeChangeListener(this._onChange);
+  componentWillReceiveProps: function(newProps) {
+    this.setState(getStateFromStores(this.stores()));
   },
 
   render: function() {
@@ -77,13 +71,6 @@ var ThreadSection = React.createClass({
           </ul>
       </div>
     );
-  },
-
-  /**
-   * Event handler for 'change' events coming from the stores
-   */
-  _onChange: function() {
-    this.setState(getStateFromStores(this.stores()));
   }
 
 });
