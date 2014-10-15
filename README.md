@@ -102,3 +102,55 @@ app.start(function(err) {
 ```
 
 The API above are the things I'm pretty certain about. The app itself will let you register for actions and includes a dispatcher of its own. The thing that I'm not sure about is how to add stores to the equation. We could do something like `app.state('messages', MessagesStore)`, but then maybe they should just be defined as plugins. I guess we'll just have to start building this thing and find out.
+
+### Plugins
+
+With having the basics up and running for Bly, the more I'm thinking we'd benefit from the Hapi plugin system, something that served as one of the initial reasons to try this kind of approach. I'm actually skeptical that this simple chat app really warrants it. The solution that we have right now where I've simply passed the app object to some constructors in order to clean up the app.js code doesn't have any great drawbacks on this scale.
+
+However, at larger scales it will, and composing various bits of the app becomes harder [citation needed](). Providing a very basic and flexible plugin system in the same way Hapi does could make *growing* and *maturing* apps a lot better, which is something we aspire to do (see goals section).
+
+How about something like the following
+
+```js
+
+// definition
+var eating = {
+	register: function(plugin, options, next) {
+	
+		plugin.action({
+			name: 'eat',
+			handler: function(waitFor, food) {}
+		});
+
+		plugin.render(function() {
+			React.renderComponent(indicator({}), someOtherElement);
+		});
+
+		plugin.register(otherPlugin, function(err) {
+			next();
+		});
+	}
+};
+
+
+// registration
+var app = new Bly.App();
+
+app.register(eating);
+
+// passing options to register function
+
+app.register({
+	plugin: eating,
+	options: {
+		desert: 'puppies' // (ohnoes!)
+	}
+});
+
+// arrays are welcome too
+app.register([
+	eating,
+	drinking
+]);
+
+```
