@@ -18,6 +18,7 @@
   "devDependencies": {
     "browserify": "^5.11.2",
     "envify": "^3.0.0",
+    "joi": "^4.7.0",
     "reactify": "^0.14.0",
     "tape": "^3.0.0",
     "watchify": "^1.0.2"
