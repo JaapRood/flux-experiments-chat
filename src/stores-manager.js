@@ -3,7 +3,37 @@ var _ = require('lodash');
 
 var internals = {};
 
-exports = module.exports = internals.StoresManager = function(app, stores) {
+exports.name = 'StoresManager';
+
+exports.register = function(plugin, options, next) {
+
+	var manager = new internals.StoresManager(options.stores);
+
+
+	var registerHandlers = function(storesByName) {
+		return _.map(storesByName, function(store, name) {
+			var handlers = store.constructor.handlers;
+
+			return _.map(handlers, function(handler, actionName) {
+				console.log(actionName, store[handler]);
+
+				plugin.action({
+					name: actionName,
+					handler: store[handler].bind(store),
+					ref: name
+				});
+			});
+		});
+	};
+
+	registerHandlers(manager.getAll());
+
+	plugin.expose('stores', manager);
+
+	next();
+};
+
+internals.StoresManager = function(stores) {
 
 	this.get = this.get.bind(this);
 
@@ -18,21 +48,8 @@ exports = module.exports = internals.StoresManager = function(app, stores) {
 	this.byName = _.indexBy(this.instances, function(store) {
 		return store.constructor.storeName || _.uniqueId('store_');
 	});
-
-	// register their handlers
-	this.handlerRefs = _.map(this.byName, function(store, name) {
-		var handlers = store.constructor.handlers;
-
-		return _.map(handlers, function(handler, actionName) {
-			return app.action({
-				name: actionName,
-				handler: store[handler].bind(store),
-				ref: name
-			});
-		});
-
-	});
 }
+
 
 internals.StoresManager.prototype.get = function(name) {
 	if (_.isFunction(name)) {

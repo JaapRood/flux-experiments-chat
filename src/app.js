@@ -10,27 +10,37 @@ var React = require('react'),
 var ExampleData = require('./example-data'),
 	Api = require('./utils/api');
 
+// populate with debug data
+ExampleData.init();
+
 
 var app = new Bly.App();
 
-// register stores (app should probably have a 'safe' place to attach properties to)
-app.stores = new StoresManager(app, Stores);
+app.register([
+	{
+		plugin: StoresManager,
+		options: {
+			stores: Stores
+		}
+	}
+], function(err) {
+	if (err) throw err; // treat errors registering plugins as unrecoverable event
 
-// initial data and start
-ExampleData.init();
+	app.stores = app.plugins.StoresManager.stores;
+	app.start();
+	
+	Api.getAllMessages(function(err, rawMessages) {
+		if (err) return console.error(err);
 
-app.start(); // not sure if we're going to really need this idea of starting the app
+		MessagesActions.receiveAll(app, rawMessages)
 
-Api.getAllMessages(function(err, rawMessages) {
-	if (err) return console.error(err);
+		var allThreads = app.stores.get(StoreNames.THREADS).getAll();
+		var firstThread = allThreads.first();
 
-	MessagesActions.receiveAll(app, rawMessages)
-
-	var allThreads = app.stores.get(StoreNames.THREADS).getAll();
-	var firstThread = allThreads.first();
-
-	ThreadsActions.clickThread(app, firstThread.get('id'));
+		ThreadsActions.clickThread(app, firstThread.get('id'));
+	});
 });
+
 
 
 // as soon as the DOM is ready we'll start rendering the app
