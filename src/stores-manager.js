@@ -15,8 +15,6 @@ exports.register = function(plugin, options, next) {
 			var handlers = store.constructor.handlers;
 
 			return _.map(handlers, function(handler, actionName) {
-				console.log(actionName, store[handler]);
-
 				plugin.action({
 					name: actionName,
 					handler: store[handler].bind(store),
@@ -28,7 +26,9 @@ exports.register = function(plugin, options, next) {
 
 	registerHandlers(manager.getAll());
 
-	plugin.expose('stores', manager);
+	plugin.results(function(report) {
+		report('stores', manager);
+	});
 
 	next();
 };

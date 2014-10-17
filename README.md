@@ -154,3 +154,40 @@ app.register([
 ]);
 
 ```
+
+#### Rendering in the plugins
+
+With basic plugin registering support in, it's becoming more evident how plugins can really play the role of dividing the app into multiple logical units, not unlike they do in Hapi. Imagine this the chat app being just a part of the overall app we're building, perhaps like Intercom's messaging client. It would be greatly beneficial if we could just write the `ChatSection` plugin and use it anywhere else in the app where we might require the chat section to be available. 
+
+The main question we face is how do we get the result of an action life cycle to flow back to the app's render method?
+
+Perhaps we should be able to register callbacks to get the resulting state after it was updated through the action flowing through the system.
+
+```js
+
+app.results(function(report) {
+	report('stores', storeManager);
+});
+
+// or instead of a side effect just return it
+
+app.results(function() {
+	return {
+		stores: storeManager
+	};
+});
+
+```
+	
+The render method could then look something like this
+
+```js
+
+app.render(function(results) {
+	React.renderComponent(ChatApp({
+		stores: results.stores
+	}));
+});
+
+```
+
