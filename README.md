@@ -154,3 +154,28 @@ app.register([
 ]);
 
 ```
+
+### First class store support
+
+I'm wondering whether we'll benefit from proper support for the concept of Stores. So far what we've been doing is try and stay away from this. Because I believe maintaining state is one of the harder to solve problems, I don't think it's something we want to be opinionated about. However, at the same time, the idea of having some concept of a Store is core to the Flux architecture, no matter how it's implemented. 
+
+What I seem to be running into is a limit in how to access stores from the rest of the app, no matter their interface. Could we assume that Stores are always objects with getters, which wraps the actual state it's representing? It does seem to be a real Flux thing where components query stores, and the state in the stores are per *domain*, not state per component. For that to work in the first place you do need an interface to query from, so I think we can assume that.
+
+If so, we could probably facilitate *exposing* and getting access to stores. Could be pretty simple too, API wise.
+
+```js
+
+// getting
+app.stores(); // map of all
+
+app.stores('dinner'); // single
+
+// setting
+app.stores({ // set all
+	dinner: dinnerStore,
+	lunch: lunchStore
+}); 
+
+app.stores('dinner', dinnerStore);
+
+```
