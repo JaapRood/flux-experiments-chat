@@ -1,5 +1,4 @@
 var util = require('util'),
-	BaseStore = require('dispatchr/utils/BaseStore'),
 	Actions = require('app/actions'),
 	MessagesUtils = require('app/utils/messages'),
 	Stores = require('app/store-names'),
@@ -55,8 +54,6 @@ exports.register = function(plugin, options, next) {
 	next();
 };
 
-
-util.inherits(MessageStore, BaseStore);
 
 MessageStore.prototype.dehydrate = function() {
 	return {

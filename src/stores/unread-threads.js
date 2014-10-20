@@ -1,5 +1,4 @@
 var util = require('util'),
-	BaseStore = require('dispatchr/utils/BaseStore'),
 	_ = require('lodash'),
 	Stores = require('app/store-names');
 
@@ -17,7 +16,7 @@ function UnreadThreadsStore(getStore) {
 UnreadThreadsStore.storeName = Stores.UNREAD_THREADS;
 UnreadThreadsStore.handlers = {};
 
-util.inherits(UnreadThreadsStore, BaseStore);
+// util.inherits(UnreadThreadsStore, BaseStore);
 
 // We don't really hold any state ourselves, so hydration is not that useful, but
 // we'll make sure we adhere to the interface of stores

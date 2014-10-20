@@ -1,5 +1,4 @@
 var util = require('util'),
-	BaseStore = require('dispatchr/utils/BaseStore'),
 	Actions = require('app/actions'),
 	Stores = require('app/store-names'),
 	Immutable = require('immutable'),
@@ -21,7 +20,7 @@ ThreadsStore.handlers = {};
 ThreadsStore.handlers[Actions.RECEIVE_RAW_MESSAGES] = 'receiveMessages';
 ThreadsStore.handlers[Actions.CLICK_THREAD] = 'openThread';
 
-util.inherits(ThreadsStore, BaseStore);
+// util.inherits(ThreadsStore, BaseStore);
 
 ThreadsStore.prototype.dehrydate = function() {
 	return {
