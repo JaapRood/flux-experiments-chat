@@ -25,8 +25,8 @@ var UnreadThreadStore = require('app/stores/unread-threads');
 var _ = require('lodash');
 
 function getStateFromStores(stores) {
-  var threadsStore = stores.get(ThreadStore),
-    unreadThreadsStore = stores.get(UnreadThreadStore);
+  var threadsStore = stores(ThreadStore),
+    unreadThreadsStore = stores(UnreadThreadStore);
 
   return {
     threads: threadsStore.getAllChrono(),
@@ -40,11 +40,11 @@ var ThreadSection = React.createClass({
   mixins: [BlyMixin, ImmutableMixin],
 
   getInitialState: function() {
-    return getStateFromStores(this.stores());
+    return getStateFromStores(this.stores);
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.setState(getStateFromStores(this.stores()));
+    this.setState(getStateFromStores(this.stores));
   },
 
   render: function() {

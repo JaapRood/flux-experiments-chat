@@ -10,18 +10,18 @@ var mixin = createAppContextMixin(function(props) {
 	};
 }, 'appContext');
 
-mixin.stores = function() {
+mixin.stores = function(name) {
 	var context = this.getAppContext();
 	invariant(context.app, "Can't find the Bly App to which this component belongs");
 
-	return context.app.stores;
-};
+	if (_.isFunction(name)) {
+		// accept functions that have a 'storeName' attribute
+		name = name.storeName;
+	}
 
-mixin.getStore = function(name) {
-	var stores = this.stores();
-	invariant(stores, "Can't find the stores on the app");
+	invariant(_.isString(name), "Name of store (or function with 'storeName' prop) required to retrieve a store");
 
-	return stores.get(name);
+	return context.app.stores(name);
 };
 
 mixin.intentTo = function(actionNameOrCreator) {

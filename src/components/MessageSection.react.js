@@ -22,8 +22,8 @@ var MessageStore = require('app/stores/messages');
 var ThreadStore = require('app/stores/threads');
 
 function getStateFromStores(stores) {
-  var messagesStore = stores.get(MessageStore),
-    threadsStore = stores.get(ThreadStore);
+  var messagesStore = stores(MessageStore),
+    threadsStore = stores(ThreadStore);
 
   var state = {
     messages: messagesStore.getAllForCurrentThread(),
@@ -50,7 +50,7 @@ var MessageSection = React.createClass({
   ],
 
   getInitialState: function() {
-    return getStateFromStores(this.stores());
+    return getStateFromStores(this.stores);
   },
 
   componentDidMount: function() {
@@ -58,7 +58,7 @@ var MessageSection = React.createClass({
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.setState(getStateFromStores(this.stores()));
+    this.setState(getStateFromStores(this.stores));
   },
 
   render: function() {

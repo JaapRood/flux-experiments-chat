@@ -1,7 +1,6 @@
 var React = require('react'),
 	ChatApp = require('./components/ChatApp.react'),
 	Stores = require('./stores'),
-	StoresManager = require('./stores-manager'),
 	StoreNames = require('./store-names'),
 	ThreadsActions = require('./action-creators/threads'),
 	MessagesActions = require('./action-creators/messages'),
@@ -17,16 +16,10 @@ ExampleData.init();
 var app = new Bly.App();
 
 app.register([
-	{
-		plugin: StoresManager,
-		options: {
-			stores: Stores
-		}
-	}
+	Stores
 ], function(err) {
 	if (err) throw err; // treat errors registering plugins as unrecoverable event
 
-	app.stores = app.plugins.StoresManager.stores;
 	app.start();
 	
 	Api.getAllMessages(function(err, rawMessages) {
@@ -34,7 +27,7 @@ app.register([
 
 		MessagesActions.receiveAll(app, rawMessages)
 
-		var allThreads = app.stores.get(StoreNames.THREADS).getAll();
+		var allThreads = app.stores(StoreNames.THREADS).getAll();
 		var firstThread = allThreads.first();
 
 		ThreadsActions.clickThread(app, firstThread.get('id'));

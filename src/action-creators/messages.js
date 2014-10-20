@@ -5,7 +5,7 @@ var Actions = require('app/actions'),
 
 var MessagesActions = {
 	create: function(app, text, done) {
-		var threadsStore = app.stores.get(Stores.THREADS);
+		var threadsStore = app.stores(Stores.THREADS);
 
 		var message = MessagesUtils.createByText(text, threadsStore.getCurrentID());
 
