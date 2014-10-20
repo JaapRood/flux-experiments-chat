@@ -1,14 +1,14 @@
 var _ = require('lodash');
 
 var stores = [
-	require('./stores/threads'),
-	require('./stores/unread-threads')
+	require('./threads'),
+	require('./unread-threads')
 ];
 
 exports.register = function(plugin, options, next) {
 	// stores can define themselves as a plugin
 	plugin.register([
-		require('./stores/messages')
+		require('./messages')
 	], function(err) {
 		if (err) return next(err);
 		// or we can help them do it
