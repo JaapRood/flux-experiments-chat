@@ -6,6 +6,16 @@ var stores = [
 ];
 
 exports.register = function(plugin, options, next) {
+	// stores can define themselves as a plugin
+	// ----------------------------------------
+	
+	plugin.register([
+		require('./stores/messages')
+	], next);
+
+	// or we can help them do it
+	// -------------------------
+
 	// create instance for every store
 	var storeInstances = _.map(stores, function(storeConstructor) {
 		return new storeConstructor(plugin.stores);
@@ -33,10 +43,6 @@ exports.register = function(plugin, options, next) {
 	plugin.stores(storesByName);
 
 
-	// register the stores that register themselves
-	plugin.register([
-		require('./stores/messages')
-	], next);
 }
 
 exports.name = 'stores'
