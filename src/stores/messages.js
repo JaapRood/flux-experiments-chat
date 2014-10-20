@@ -9,7 +9,6 @@ var util = require('util'),
 	IMap = Immutable.Map,
 	Vector = Immutable.Vector;
 
-
 function MessageStore(getStore) {
 	this.getStore = getStore;
 	this.messages = IMap();
@@ -18,10 +17,44 @@ function MessageStore(getStore) {
 
 MessageStore.storeName = Stores.MESSAGES;
 
-MessageStore.handlers = {};
-MessageStore.handlers[Actions.RECEIVE_RAW_MESSAGES] = 'receiveMessages';
-MessageStore.handlers[Actions.CLICK_THREAD] = 'openThread';
-MessageStore.handlers[Actions.CREATE_MESSAGE] = 'createMessage';
+exports = module.exports = MessageStore;
+
+exports.pluginName = MessageStore.storeName;
+exports.register = function(plugin, options, next) {
+	var store = new MessageStore(plugin.stores);
+
+	// make ourselves available using our name
+	plugin.stores(MessageStore.storeName, store);
+
+
+	// register for actions
+	plugin.action({
+		name: Actions.RECEIVE_RAW_MESSAGES,
+		ref: MessageStore.storeName,
+		handler: function(waitFor, messages) {
+			store.receiveMessages(messages);
+		}
+	});
+
+	plugin.action({
+		name: Actions.CLICK_THREAD,
+		ref: MessageStore.storeName,
+		handler: function(waitFor, threadID) {
+			store.openThread(threadID);
+		}
+	});
+
+	plugin.action({
+		name: Actions.CREATE_MESSAGE,
+		ref: MessageStore.storeName,
+		handler: function(waitFor, message) {
+			store.createMessage(message);
+		}
+	});
+
+	next();
+};
+
 
 util.inherits(MessageStore, BaseStore);
 
@@ -37,7 +70,7 @@ MessageStore.prototype.rehydrate = function(state) {
 	this.sortedByDate = Vector.from(state.sortedByDate);
 };
 
-MessageStore.prototype.receiveMessages = function(waitFor, messages) {
+MessageStore.prototype.receiveMessages = function(messages) {
 	var store = this;
 
 	var currentThreadId = store.getCurrentThreadID();
@@ -69,7 +102,7 @@ MessageStore.prototype.receiveMessages = function(waitFor, messages) {
 		});
 };
 
-MessageStore.prototype.openThread = function(waitFor, threadID) {
+MessageStore.prototype.openThread = function(threadID) {
 	var messagesInThread = this.getAllForThread(threadID);
 
 	this.messages = this.messages.withMutations(function(messages) {
@@ -115,5 +148,3 @@ MessageStore.prototype.getCurrentThreadID = function() {
 	return threadsStore.getCurrentID();
 };
 
-
-module.exports = MessageStore;

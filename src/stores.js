@@ -1,7 +1,6 @@
 var _ = require('lodash');
 
 var stores = [
-	require('./stores/messages'),
 	require('./stores/threads'),
 	require('./stores/unread-threads')
 ];
@@ -33,7 +32,11 @@ exports.register = function(plugin, options, next) {
 	// make stores available to rest of the app
 	plugin.stores(storesByName);
 
-	next();
-};
+
+	// register the stores that register themselves
+	plugin.register([
+		require('./stores/messages')
+	], next);
+}
 
 exports.name = 'stores'
