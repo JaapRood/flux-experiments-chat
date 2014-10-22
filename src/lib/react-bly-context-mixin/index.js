@@ -1,4 +1,4 @@
-var createAppContextMixin = require('app/lib/react-app-context-mixin'),
+var createAppContextMixin = require('react-app-context-mixin'),
 	invariant = require('./invariant'),
 	_ = require('lodash');
 
