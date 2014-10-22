@@ -1,5 +1,5 @@
 var React = require('react'),
-	Bly = require('app/lib/bly'),
+	Bly = require('bly'),
 	ChatApp = require('./chatapp');
 
 var app = new Bly.App();

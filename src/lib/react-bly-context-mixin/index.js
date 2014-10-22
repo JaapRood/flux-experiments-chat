@@ -1,5 +1,5 @@
 var createAppContextMixin = require('app/lib/react-app-context-mixin'),
-	invariant = require('app/lib/bly/lib/invariant'),
+	invariant = require('./invariant'),
 	_ = require('lodash');
 
 var mixin = createAppContextMixin(function(props) {

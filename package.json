@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "async": "^0.9.0",
+    "bly": "^0.2.0",
     "immutable": "^2.0.17",
     "lodash": "^2.4.1",
     "react": "^0.11.2"
