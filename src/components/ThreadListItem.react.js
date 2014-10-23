@@ -15,7 +15,7 @@
 var ThreadsActions = require('app/action-creators/threads');
 var React = require('react');
 // var ReactFluxMixin = require('app/lib/react-flux-context-mixin');
-var BlyMixin = require('app/lib/react-bly-context-mixin');
+var BlyMixin = require('bly-react-mixin');
 var ImmutableMixin = require('app/lib/react-immutable-mixin');
 
 var cx = require('react/lib/cx');
@@ -53,7 +53,7 @@ var ThreadListItem = React.createClass({
   },
 
   _onClick: function() {
-    this.intentTo(ThreadsActions.clickThread, this.props.thread.get('id'));
+    this.inject(ThreadsActions.clickThread, this.props.thread.get('id'));
   }
 
 });

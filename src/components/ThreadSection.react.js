@@ -14,7 +14,7 @@
 
 var React = require('react');
 // var ReactFluxMixin = require('app/lib/react-flux-context-mixin');
-var BlyMixin = require('app/lib/react-bly-context-mixin');
+var BlyMixin = require('bly-react-mixin');
 var ImmutableMixin = require('app/lib/react-immutable-mixin');
 
 var MessageStore = require('app/stores/messages');
@@ -25,8 +25,8 @@ var UnreadThreadStore = require('app/stores/unread-threads');
 var _ = require('lodash');
 
 function getStateFromStores(stores) {
-  var threadsStore = stores(ThreadStore),
-    unreadThreadsStore = stores(UnreadThreadStore);
+  var threadsStore = stores(ThreadStore.storeName),
+    unreadThreadsStore = stores(UnreadThreadStore.storeName);
 
   return {
     threads: threadsStore.getAllChrono(),

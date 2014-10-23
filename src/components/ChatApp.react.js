@@ -13,7 +13,7 @@
  */
 
 var React = require('react');
-var BlyMixin = require('app/lib/react-bly-context-mixin');
+var BlyMixin = require('bly-react-mixin');
 
 var MessageSection = require('./MessageSection.react');
 var ThreadSection = require('./ThreadSection.react');

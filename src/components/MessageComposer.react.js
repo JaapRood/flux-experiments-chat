@@ -13,7 +13,7 @@
  */
 
 var React = require('react');
-var BlyMixin = require('app/lib/react-bly-context-mixin');
+var BlyMixin = require('bly-react-mixin');
 var MessagesActions = require('app/action-creators/messages');
 
 var ENTER_KEY_CODE = 13;
@@ -46,7 +46,7 @@ var MessageComposer = React.createClass({
     if (event.keyCode === ENTER_KEY_CODE) {
       var text = this.state.text.trim();
       if (text) {
-        this.intentTo(MessagesActions.create, text);
+        this.inject(MessagesActions.create, text);
       }
       this.setState({text: ''});
     }

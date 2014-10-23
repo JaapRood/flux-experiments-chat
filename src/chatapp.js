@@ -35,7 +35,7 @@ exports.register = function(plugin, options, next) {
 		// render the chat app
 		plugin.results(function(report) {
 			report('chat', ChatApp({
-				app: plugin
+				bly: plugin
 			}));
 		});
 

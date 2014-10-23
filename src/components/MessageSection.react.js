@@ -13,7 +13,7 @@
  */
 
 var React = require('react');
-var BlyMixin = require('app/lib/react-bly-context-mixin');
+var BlyMixin = require('bly-react-mixin');
 var ImmutableMixin = require('app/lib/react-immutable-mixin');
 
 var MessageComposer = require('./MessageComposer.react');
@@ -22,8 +22,8 @@ var MessageStore = require('app/stores/messages');
 var ThreadStore = require('app/stores/threads');
 
 function getStateFromStores(stores) {
-  var messagesStore = stores(MessageStore),
-    threadsStore = stores(ThreadStore);
+  var messagesStore = stores(MessageStore.storeName),
+    threadsStore = stores(ThreadStore.storeName);
 
   var state = {
     messages: messagesStore.getAllForCurrentThread(),
